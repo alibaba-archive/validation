@@ -1,0 +1,9 @@
+.idea/
+tmp
+vendor
+release
+swagger.json
+.idea/
+dist
+!dist/Dockerfile
+coverage/
