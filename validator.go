@@ -15,6 +15,7 @@ import (
 	"reflect"
 	"strings"
 	"sync"
+	"errors"
 )
 
 // ex01 simple use
@@ -397,9 +398,15 @@ func (mv *Validation) getValidFuns(tf reflect.StructField, tag string) map[strin
 	return out
 }
 
-// ValidStruct ...
-func ValidStruct(v interface{}) (bool, []*Error){
+// ValidateStruct ...
+func ValidateStruct(v interface{}) (bool, error){
 	vld := NewValidation()
 	res := vld.Validate(v)
-	return  res, vld.Errors
+
+	if !res {
+		return res, errors.New(vld.ErrMsg())
+	}
+
+	return res, nil
+
 }

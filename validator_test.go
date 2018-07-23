@@ -269,7 +269,7 @@ func TestCustomValidaterConflict(t *testing.T) {
 	}
 }
 
-func TestValidStruct(t *testing.T) {
+func TestValidateStruct(t *testing.T) {
 	objID := NewObjectID()
 	person := PersonWithMongoID  {
 		Name: "DavadDiOne",
@@ -278,9 +278,9 @@ func TestValidStruct(t *testing.T) {
 		FriendIDs:  []TestObjectID{objID, objID},
 	}
 
-	res, errs := ValidStruct(person)
+	res, errs := ValidateStruct(person)
 	if !res {
-		t.Errorf("TestValidStruct Failed %s", errs)
+		t.Errorf("TestValidateStruct Failed %s", errs)
 	}
 }
 
