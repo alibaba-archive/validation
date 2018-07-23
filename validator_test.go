@@ -6,6 +6,16 @@ import (
 	"testing"
 )
 
+type TestObjectID string
+
+func NewObjectID() TestObjectID {
+	return TestObjectID("4d88e15b60f486e428412dc9")
+}
+
+func (o TestObjectID) String() string {
+	return fmt.Sprintf(`ObjectIdHex("%s")`, string(o))
+}
+
 // Person for test struct
 type Person struct {
 	Name     *string   `valid:"required"`
@@ -13,6 +23,13 @@ type Person struct {
 	Age      int       `valid:"-"`
 	Sex      int       ``
 	WebSites []*string `valid:"url"`
+}
+
+type PersonWithMongoID struct {
+	Name       string         `valid:"required;name"`
+	MongoIDPtr *TestObjectID  `valid:"mongoid"`
+	UserID     TestObjectID   `valid:"mongoid"`
+	FriendIDs  []TestObjectID `valid:"mongoid"`
 }
 
 func (p *Person) TValidater() error {
@@ -83,6 +100,37 @@ func TestValidationIf(t *testing.T) {
 	res := validor.Validate(person)
 	if res {
 		t.Errorf("TestValidationIf failed:\n %s", validor.ErrMsg())
+	}
+}
+
+// Test struct interface
+func TestMongodbID(t *testing.T) {
+	objID := NewObjectID()
+	person := PersonWithMongoID  {
+		Name: "DavadDiOne",
+		MongoIDPtr: &objID,
+		UserID:     objID,
+		FriendIDs:  []TestObjectID{objID, objID},
+	}
+
+	validor := NewValidation()
+	res := validor.Validate(person)
+	if !res {
+		t.Errorf("TestMongodbID failed:\n %s", validor.ErrMsg())
+	}
+
+	person2 := PersonWithMongoID  {
+		Name:       "DavadDiTwo",
+		MongoIDPtr: &objID,
+		UserID:     TestObjectID(""),
+		FriendIDs:  []TestObjectID{objID, objID},
+
+	}
+
+	// should failed
+	res = validor.Validate(person2)
+	if res {
+		t.Errorf("TestMongodbID should failed:\n %s", validor.ErrMsg())
 	}
 }
 
@@ -220,3 +268,19 @@ func TestCustomValidaterConflict(t *testing.T) {
 		t.Errorf("AddValidater should failed [ErrValidaterExists]. but got %s\n", err.Error())
 	}
 }
+
+func TestValidStruct(t *testing.T) {
+	objID := NewObjectID()
+	person := PersonWithMongoID  {
+		Name: "DavadDiOne",
+		MongoIDPtr: &objID,
+		UserID:     objID,
+		FriendIDs:  []TestObjectID{objID, objID},
+	}
+
+	res, errs := ValidStruct(person)
+	if !res {
+		t.Errorf("TestValidStruct Failed %s", errs)
+	}
+}
+

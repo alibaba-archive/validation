@@ -8,12 +8,16 @@ import (
 
 // Error for Validater
 var (
+	ErrBadMondogObjectIDFormat     = errors.New("mongodb object id format is not valid")
+	ErrBadNameFormat     = errors.New("name len should between [2-500]")
 	ErrBadURLFormat     = errors.New("url format is not valid")
 	ErrBadEmailFormat   = errors.New("email format is not valid")
 	ErrRequired         = errors.New("field can't be empty or zero")
 	ErrValidater        = errors.New("validater should not be nil")
 	ErrValidaterNoFound = errors.New("validater not found")
 	ErrValidaterExists  = errors.New("validater exist")
+
+
 )
 
 // Error for Validator, including filedname, value, err msg.

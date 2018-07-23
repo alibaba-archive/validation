@@ -94,6 +94,8 @@ var (
 		RequiredKey: requiredChecker,
 		"email":     emailChecker,
 		"url":       urlChecker,
+		"mongoid":   isMongoObject,
+		"name":      isValidName,
 	}
 
 	// Using rwlock avoid race
@@ -393,4 +395,11 @@ func (mv *Validation) getValidFuns(tf reflect.StructField, tag string) map[strin
 	}
 
 	return out
+}
+
+// ValidStruct ...
+func ValidStruct(v interface{}) (bool, []*Error){
+	vld := NewValidation()
+	res := vld.Validate(v)
+	return  res, vld.Errors
 }

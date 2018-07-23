@@ -1,6 +1,7 @@
 package validation
 
 import (
+	"fmt"
 	"net/url"
 	"reflect"
 	"regexp"
@@ -41,6 +42,7 @@ const (
 	URLSubdomain string = `((www\.)|([a-zA-Z0-9]([-\.][a-zA-Z0-9]+)*))`
 	URL          string = `^` + URLSchema + `?` + URLUsername + `?` + `((` + URLIP + `|(\[` + IP + `\])|(([a-zA-Z0-9]([a-zA-Z0-9-]+)?[a-zA-Z0-9]([-\.][a-zA-Z0-9]+)*)|(` + URLSubdomain + `?))?(([a-zA-Z\x{00a1}-\x{ffff}0-9]+-?-?)*[a-zA-Z\x{00a1}-\x{ffff}0-9]+)(?:\.([a-zA-Z\x{00a1}-\x{ffff}]{1,}))?))` + URLPort + `?` + URLPath + `?$`
 
+	MongoDBObjectID string = `ObjectIdHex\(\"[0-9a-fA-F]{24}\"\)`
 	maxURLRuneCount = 2083
 	minURLRuneCount = 3
 )
@@ -62,6 +64,7 @@ var (
 	rxDataURI        = regexp.MustCompile(DataURI)
 	rxDNSName        = regexp.MustCompile(DNSName)
 	rxURL            = regexp.MustCompile(URL)
+	rxMongoDBID      = regexp.MustCompile(MongoDBObjectID)
 )
 
 func emailChecker(v interface{}) error {
@@ -90,7 +93,6 @@ func requiredChecker(v interface{}) error {
 }
 
 func urlChecker(v interface{}) error {
-
 	str, ok := v.(string)
 	if !ok {
 		return NewErrWrongType("string", v)
@@ -117,5 +119,37 @@ func urlChecker(v interface{}) error {
 	}
 
 	debugf("UrlChecker: [%s] passed", str)
+	return nil
+}
+
+func isMongoObject(v interface{}) error {
+	stringer, ok := v.(fmt.Stringer)
+	if !ok {
+		return NewErrWrongType("string", v)
+	}
+
+	str := stringer.String()
+
+	debugf("isMongoObject %s", str)
+
+	if !(rxMongoDBID.MatchString(str)) {
+		return ErrBadMondogObjectIDFormat
+	}
+
+	return nil
+}
+
+// isValidName, normal 2-500 字符
+func isValidName(v interface{}) error {
+	name, ok := v.(string)
+	if !ok {
+		return NewErrWrongType("string", v)
+	}
+
+	length := len(name)
+	if length < 2 || length > 500 {
+		return ErrBadNameFormat
+	}
+
 	return nil
 }
