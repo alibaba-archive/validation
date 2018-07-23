@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// Person for test struct
 type Person struct {
 	Name     *string   `valid:"required"`
 	Email    string    `valid:"required;email"`
@@ -109,7 +110,7 @@ func TestEmail(t *testing.T) {
 
 type AddFile struct {
 	FileName string `valid:"required"`
-	Url      string `valid:"-"`
+	URL      string `valid:"-"`
 }
 
 func TestNestedStruct(t *testing.T) {
@@ -126,8 +127,8 @@ func TestNestedStruct(t *testing.T) {
 	}{
 		Name:    "dave",
 		Email:   "aa@aa.com",
-		FileAdd: []*AddFile{&AddFile{FileName: "file1"}, &AddFile{FileName: "file2"}},
-		FileDel: []AddFile{AddFile{FileName: "file1"}, AddFile{FileName: "file2"}},
+		FileAdd: []*AddFile{{FileName: "file1"}, {FileName: "file2"}},
+		FileDel: []AddFile{{FileName: "file1"}, {FileName: "file2"}},
 	}
 
 	validor := NewValidation()

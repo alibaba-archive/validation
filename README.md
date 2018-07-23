@@ -8,8 +8,9 @@ The Simpler Validation in go.
 * Support Struct define **Validater() error** interface
 * Support slice/array/pointer and netestd struct validate. Not for map now!
 
-[![Build Status](http://img.shields.io/travis/teambition/validation.svg?style=flat-square)](https://travis-ci.org/teambition/validation)
-[![Coverage Status](http://img.shields.io/coveralls/teambition/validation.svg?style=flat-square)](https://coveralls.io/r/teambition/validation)
+
+[![Build Status](http://img.shields.io/travis/teambiton/validation.svg?style=flat-square)](https://travis-ci.org/teambition/validation)  [![Coverage Status](http://img.shields.io/coveralls/teambition/validation.svg?style=flat-square)](https://coveralls.io/r/teambition/validation)  [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](http://godoc.org/github.com/teambition/validation)  [![Go Report Card](https://goreportcard.com/badge/github.com/teambition/validation)](https://goreportcard.com/report/github.com/teambition/validation)   [![License MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://img.shields.io/badge/License-MIT-brightgreen.svg)
+
 
 ## Install and tests
 
@@ -287,4 +288,8 @@ Turn off Debug
 ```go
 validation.EnableDebug(false)
 ```
+
+## LICENSE
+
+MIT License https://choosealicense.com/licenses/mit/  More See https://choosealicense.com/licenses/
 
